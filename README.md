@@ -45,3 +45,7 @@ The Airdrop section allows users to participate in token distributions. Users ca
 ### Token Purchase
 
 The bot provides an option for users to buy Graphene (GRAPH) tokens. Users can view their balance and make transactions directly through the bot.
+
+### Token Smart Contract Address
+
+The smart contract address for the Graphene (GRAPH) token is: 22tizDUEkKTvLsc5KrYM9xqYZdbU9ndRBp5MCx5XT2aK
