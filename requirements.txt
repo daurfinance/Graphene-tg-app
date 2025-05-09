@@ -1,5 +1,7 @@
 aiogram
 flask
+Flask-Babel
+Babel
 python-dotenv
 solana
 pydantic

@@ -8,6 +8,7 @@ app = Flask(__name__)
 # Настройка Babel для мультиязычности
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'locales'
+app.config['BABEL_DEFAULT_DOMAIN'] = 'graphene_bot' # Добавлено для указания домена
 babel = Babel(app)
 
 @babel.localeselector
