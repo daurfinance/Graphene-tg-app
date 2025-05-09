@@ -1,11 +1,12 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
+from flask import Flask, request, jsonify
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 import logging
 from dotenv import load_dotenv
 import os
 import gettext
+import asyncio
+from threading import Thread
 
 # Load environment variables
 load_dotenv()
@@ -25,46 +26,70 @@ gettext.bindtextdomain('graphene_bot', locales_dir)
 gettext.textdomain('graphene_bot')
 _ = gettext.gettext
 
-# FastAPI Setup
-app = FastAPI()
+# Функция для выбора языка в зависимости от предпочтений пользователя
+def get_user_language(user_id):
+    # Здесь можно добавить логику получения языка из базы данных
+    # Пока просто возвращаем русский для тестирования
+    return 'ru'
 
-# Add CORS middleware for better API compatibility
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Функция для динамического переключения языка
+def localize(text, lang='en'):
+    # Устанавливаем язык и возвращаем перевод
+    try:
+        translation = gettext.translation('graphene_bot', locales_dir, languages=[lang])
+        translation.install()
+        return translation.gettext(text)
+    except FileNotFoundError:
+        # Если перевод не найден, используем English
+        return text
+
+# Flask Setup
+app = Flask(__name__)
 
 # Improved logging setup
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("GrapheneBot")
 logger.info("Bot and API are starting...")
 
-@app.get("/")
-async def read_root():
-    return {"message": "Welcome to the Graphene Telegram Bot Web Interface!"}
+@app.route("/", methods=["GET"])
+def read_root():
+    return jsonify({"message": "Welcome to the Graphene Telegram Bot Web Interface!"})
 
 # Telegram Webhook Setup
 WEBHOOK_PATH = f"/webhook/{TELEGRAM_TOKEN}"
-WEBHOOK_URL = f"https://<your-vercel-domain>{WEBHOOK_PATH}"
+WEBHOOK_URL = os.getenv("VERCEL_URL", "https://graphene-tg-app.vercel.app") + WEBHOOK_PATH
 
-@app.post(WEBHOOK_PATH)
-async def telegram_webhook(request: Request):
-    update = await request.json()
-    await dp.process_update(update)
-    return {"ok": True}
+@app.route(WEBHOOK_PATH, methods=["POST"])
+def telegram_webhook():
+    update = request.get_json()
+    asyncio.run(dp.process_update(update))
+    return jsonify({"ok": True})
+
+@app.route("/buy", methods=["GET"])
+def buy_page():
+    return jsonify({"message": "Страница покупки токенов находится в разработке."})
+
+@app.route("/airdrop", methods=["GET"])
+def airdrop_page():
+    return jsonify({"message": "Страница участия в эйрдропе находится в разработке."})
+
+@app.route("/stake", methods=["GET"])
+def stake_page():
+    return jsonify({"message": "Страница стейкинга находится в разработке."})
 
 # Set webhook on startup
-@app.on_event("startup")
-async def on_startup():
-    await bot.set_webhook(WEBHOOK_URL)
+with app.app_context():
+    @app.before_request
+    def on_startup():
+        # Исправленная функция для установки webhook при первом запросе
+        if not hasattr(app, "_webhook_set"):
+            asyncio.run(bot.set_webhook(WEBHOOK_URL))
+            app._webhook_set = True
 
 # Remove webhook on shutdown
-@app.on_event("shutdown")
-async def on_shutdown():
-    await bot.delete_webhook()
+@app.teardown_appcontext
+def on_shutdown(exception):
+    asyncio.run(bot.delete_webhook())
 
 # Telegram Bot Handlers
 @dp.message_handler(commands=['start'])
@@ -75,12 +100,12 @@ async def send_welcome(message: Message):
 async def send_help(message: Message):
     await message.reply(_("Available commands: /start, /help, /buy, /airdrop, /stake"))
 
-# Run the bot in the background
-import asyncio
-from threading import Thread
-
-def start_bot():
-    from aiogram import executor
-    executor.start_polling(dp, skip_updates=True)
-
-Thread(target=start_bot).start()
+# Run the flask server
+if __name__ == "__main__":
+    # В режиме разработки используем polling, в production - webhook
+    if os.getenv("ENVIRONMENT") == "development":
+        from aiogram import executor
+        executor.start_polling(dp, skip_updates=True)
+    else:
+        # Запускаем Flask для обработки вебхуков
+        app.run(host='0.0.0.0', port=8000)
