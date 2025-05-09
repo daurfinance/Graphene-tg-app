@@ -10,6 +10,7 @@ This repository contains a Telegram bot for the Graphene (GRAPH) token. The bot 
 - Beautiful interface with personal account and sections
 - Airdrop section for token distribution
 - Ability to buy tokens
+- Multilingual support for the web app and Telegram bot
 
 ### Setup and Run
 
