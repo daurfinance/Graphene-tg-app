@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
 import logging
 from dotenv import load_dotenv
 import os
@@ -17,7 +17,6 @@ if not TELEGRAM_TOKEN:
 
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
-dp.middleware.setup(LoggingMiddleware())
 
 # Initialize gettext for multilingual support
 locales_dir = 'locales'
@@ -29,9 +28,43 @@ _ = gettext.gettext
 # FastAPI Setup
 app = FastAPI()
 
+# Add CORS middleware for better API compatibility
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Improved logging setup
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("GrapheneBot")
+logger.info("Bot and API are starting...")
+
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to the Graphene Telegram Bot Web Interface!"}
+
+# Telegram Webhook Setup
+WEBHOOK_PATH = f"/webhook/{TELEGRAM_TOKEN}"
+WEBHOOK_URL = f"https://<your-vercel-domain>{WEBHOOK_PATH}"
+
+@app.post(WEBHOOK_PATH)
+async def telegram_webhook(request: Request):
+    update = await request.json()
+    await dp.process_update(update)
+    return {"ok": True}
+
+# Set webhook on startup
+@app.on_event("startup")
+async def on_startup():
+    await bot.set_webhook(WEBHOOK_URL)
+
+# Remove webhook on shutdown
+@app.on_event("shutdown")
+async def on_shutdown():
+    await bot.delete_webhook()
 
 # Telegram Bot Handlers
 @dp.message_handler(commands=['start'])
