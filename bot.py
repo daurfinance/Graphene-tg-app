@@ -10,6 +10,7 @@ import asyncio
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import solana
 from solana.rpc.async_api import AsyncClient
 from solders.keypair import Keypair
@@ -28,6 +29,11 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 if not TELEGRAM_TOKEN:
     raise ValueError("Пожалуйста, установите TELEGRAM_TOKEN в файле .env")
 
+# Ссылки на проект и соцсети из ENV
+PROJECT_WEBSITE = os.getenv("PROJECT_WEBSITE", "https://example.com")
+SOCIAL_TWITTER = os.getenv("SOCIAL_TWITTER", "https://twitter.com/example")
+SOCIAL_TELEGRAM = os.getenv("SOCIAL_TELEGRAM", "https://t.me/example")
+
 # Инициализация бота и диспетчера
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
@@ -35,6 +41,26 @@ dp = Dispatcher(bot)
 # Инициализация клиента Solana
 SOLANA_RPC_URL = os.getenv("SOLANA_RPC_URL", "https://api.mainnet-beta.solana.com")
 solana_client = AsyncClient(SOLANA_RPC_URL)
+
+# Клавиатура для команд
+keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="/buy"),
+            KeyboardButton(text="/airdrop"),
+            KeyboardButton(text="/stake")
+        ],
+        [
+            KeyboardButton(text="Open WebApp"),
+            KeyboardButton(text="Project Website")
+        ],
+        [
+            KeyboardButton(text="Twitter"),
+            KeyboardButton(text="Telegram")
+        ]
+    ],
+    resize_keyboard=True
+)
 
 # Функция для получения или создания пользователя
 def get_or_create_user(telegram_id: str):
@@ -62,7 +88,14 @@ async def connect_wallet(wallet_address: str):
 async def send_welcome(message: types.Message):
     """Обработчик команды /start"""
     user = get_or_create_user(message.from_user.id)
-    await message.reply(f"Привет, {message.from_user.first_name}! Ваш текущий баланс: {user.balance} токенов.")
+    await message.reply(
+        f"Привет, {message.from_user.first_name}! Ваш текущий баланс: {user.balance} токенов.\n\n"
+        f"Ссылки на проект:\n"
+        f"- Вебсайт: {PROJECT_WEBSITE}\n"
+        f"- Twitter: {SOCIAL_TWITTER}\n"
+        f"- Telegram: {SOCIAL_TELEGRAM}",
+        reply_markup=keyboard
+    )
 
 @dp.message_handler(commands=['help'])
 async def send_help(message: types.Message):
@@ -102,6 +135,18 @@ async def stake_tokens(message: types.Message):
 async def connect_wallet_command(message: types.Message):
     """Обработчик команды /wallet"""
     await message.reply("Для подключения кошелька Solana, пожалуйста, перейдите по ссылке: https://graphene-tg-app.vercel.app")
+
+@dp.message_handler(lambda message: message.text == "Project Website")
+async def project_website(message: types.Message):
+    await message.reply(f"Посетите наш сайт: {PROJECT_WEBSITE}")
+
+@dp.message_handler(lambda message: message.text == "Twitter")
+async def twitter(message: types.Message):
+    await message.reply(f"Подписывайтесь на нас в Twitter: {SOCIAL_TWITTER}")
+
+@dp.message_handler(lambda message: message.text == "Telegram")
+async def telegram(message: types.Message):
+    await message.reply(f"Присоединяйтесь к нашему Telegram-каналу: {SOCIAL_TELEGRAM}")
 
 @dp.message_handler()
 async def echo(message: types.Message):

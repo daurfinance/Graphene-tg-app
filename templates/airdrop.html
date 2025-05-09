@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airdrop</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>{{ message }}</h1>
+    </header>
+    <main>
+        <p>Claim your free tokens by participating in the airdrop!</p>
+        <form action="/connect-wallet" method="POST">
+            <label for="wallet_address">Enter your wallet address:</label>
+            <input type="text" id="wallet_address" name="wallet_address" required>
+            <button type="submit">Connect Wallet</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025 Graphene Project</p>
+    </footer>
+</body>
+</html>
