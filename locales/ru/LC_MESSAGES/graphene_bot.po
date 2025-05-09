@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Graphene Bot\n"
-"POT-Creation-Date: 2025-05-09 00:00+0000\n"
-"PO-Revision-Date: 2025-05-09 00:00+0000\n"
-"Last-Translator: Graphene Team\n"
+"POT-Creation-Date: 2025-05-10 00:00+0000\n"
+"PO-Revision-Date: 2025-05-10 00:00+0000\n"
+"Last-Translator: GitHub Copilot\n"
 "Language-Team: ru\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
 
 msgid "Welcome to the Graphene Bot! Use /help to see available commands."
 msgstr "Добро пожаловать в бот Graphene! Используйте /help, чтобы увидеть доступные команды."
@@ -18,3 +18,109 @@ msgstr "Доступные команды: /start, /help, /buy, /airdrop, /stake
 
 msgid "Your current balance is:"
 msgstr "Ваш текущий баланс:"
+
+# Button texts (source in code is Russian, target is Russian)
+msgid "🚀 GrapheneApp"
+msgstr "🚀 GrapheneApp"
+
+msgid "ℹ️ О Проекте"
+msgstr "ℹ️ О Проекте"
+
+msgid "🌐 Язык"
+msgstr "🌐 Язык"
+
+msgid "🔗 Соц. Сети"
+msgstr "🔗 Соц. Сети"
+
+msgid "📜 Whitepaper"
+msgstr "📜 Whitepaper"
+
+msgid "🗺️ Дорожная карта"
+msgstr "🗺️ Дорожная карта"
+
+msgid "👥 Команда"
+msgstr "👥 Команда"
+
+msgid "🌍 Наш сайт"
+msgstr "🌍 Наш сайт"
+
+msgid "⬅️ Назад"
+msgstr "⬅️ Назад"
+
+msgid "🐦 Twitter"
+msgstr "🐦 Twitter"
+
+msgid "✈️ Telegram Канал"
+msgstr "✈️ Telegram Канал"
+
+# Message texts (source in code is Russian, target is Russian)
+msgid "👋 Добро пожаловать в Graphene Bot!\n\nИспользуйте кнопки ниже для навигации."
+msgstr "👋 Добро пожаловать в Graphene Bot!\n\nИспользуйте кнопки ниже для навигации."
+
+msgid "Язык изменен на {lang_name}."
+msgstr "Язык изменен на {lang_name}."
+
+msgid "Пожалуйста, выберите язык:"
+msgstr "Пожалуйста, выберите язык:"
+
+msgid "Данные из WebApp получены: {data}"
+msgstr "Данные из WebApp получены: {data}"
+
+msgid "Раздел 'О Проекте'. Выберите опцию:"
+msgstr "Раздел 'О Проекте'. Выберите опцию:"
+
+msgid "Whitepaper был отправлен. Выберите другую опцию или вернитесь назад:"
+msgstr "Whitepaper был отправлен. Выберите другую опцию или вернитесь назад:"
+
+msgid "Дорожная карта была отправлена. Выберите другую опцию или вернитесь назад:"
+msgstr "Дорожная карта была отправлена. Выберите другую опцию или вернитесь назад:"
+
+msgid "Информация о команде была отправлена. Выберите другую опцию или вернитесь назад:"
+msgstr "Информация о команде была отправлена. Выберите другую опцию или вернитесь назад:"
+
+msgid "Посетите наш сайт: {url}"
+msgstr "Посетите наш сайт: {url}"
+
+msgid "Наши социальные сети:"
+msgstr "Наши социальные сети:"
+
+msgid "Наш Twitter: {url}"
+msgstr "Наш Twitter: {url}"
+
+msgid "Наш Telegram канал: {url}"
+msgstr "Наш Telegram канал: {url}"
+
+msgid "Главное меню."
+msgstr "Главное меню."
+
+# Texts used for matching incoming messages (source from TEXT_..._EN constants in main.py)
+# For these, msgid is English, and msgstr is the Russian translation for ru.po file.
+msgid "ℹ️ About Project"
+msgstr "ℹ️ О Проекте"
+
+msgid "🌐 Language"
+msgstr "🌐 Язык"
+
+msgid "🔗 Social Media"
+msgstr "🔗 Соц. Сети"
+
+msgid "📜 Whitepaper"
+msgstr "📜 Whitepaper"
+
+msgid "🗺️ Roadmap"
+msgstr "🗺️ Дорожная карта"
+
+msgid "👥 Team"
+msgstr "👥 Команда"
+
+msgid "🌍 Our Website"
+msgstr "🌍 Наш сайт"
+
+msgid "🐦 Twitter"
+msgstr "🐦 Twitter"
+
+msgid "✈️ Telegram Channel"
+msgstr "✈️ Telegram Канал"
+
+msgid "⬅️ Back"
+msgstr "⬅️ Назад"
