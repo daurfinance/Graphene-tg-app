@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphene Token Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Graphene Token Bot</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('airdrop') }}">Airdrop</a></li>
+                <li><a href="{{ url_for('buy_tokens') }}">Buy Tokens</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Personal Account</h2>
+            <p>Username: {{ user.username }}</p>
+            <p>Balance: {{ user.balance }} GRAPH</p>
+        </section>
+        <section>
+            <h2>Sections</h2>
+            <ul>
+                <li><a href="{{ url_for('airdrop') }}">Airdrop</a></li>
+                <li><a href="{{ url_for('buy_tokens') }}">Buy Tokens</a></li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Graphene Token Bot. All rights reserved.</p>
+    </footer>
+</body>
+</html>
